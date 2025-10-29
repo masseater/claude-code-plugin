@@ -1,0 +1,66 @@
+pre-commit:
+  commands:
+    security-check:
+      run: |
+        echo "🔍 セキュリティチェックを実行中..."
+
+        # ステージングされた変更を取得
+        STAGED_DIFF=$(git diff --cached)
+
+        # 変更がない場合はスキップ
+        if [ -z "$STAGED_DIFF" ]; then
+            echo "✅ 変更なし。スキップします。"
+            exit 0
+        fi
+
+        # 一時ファイルに差分を保存
+        TEMP_FILE=$(mktemp)
+        echo "$STAGED_DIFF" > "$TEMP_FILE"
+
+        # Claude Codeにセキュリティチェックを依頼するプロンプトを作成
+        cat > /tmp/claude_prompt.txt << 'EOF'
+        以下のgit diffの内容をセキュリティの観点で分析してください。
+
+        チェック項目:
+        - APIキー、パスワード、トークンなどの機密情報のハードコード
+        - 危険な関数やコマンドの使用（eval, exec, system呼び出しなど）
+        - SQLインジェクション、XSSなどの脆弱性
+        - 企業の機密情報や非公開の技術情報
+        - セキュリティ設定の不適切な変更
+
+        問題がある場合は「SECURITY_RISK:」で始まる行で具体的に指摘してください。
+        問題がない場合は「OK」とだけ回答してください。
+
+        差分内容:
+        ```diff
+        EOF
+
+        cat "$TEMP_FILE" >> /tmp/claude_prompt.txt
+        echo '```' >> /tmp/claude_prompt.txt
+
+        # Claude Code CLIを実行
+        RESULT=$(cat /tmp/claude_prompt.txt | claude 2>&1 || true)
+
+        # 一時ファイルを削除
+        rm -f "$TEMP_FILE" /tmp/claude_prompt.txt
+
+        # 結果を確認
+        if echo "$RESULT" | grep -q "SECURITY_RISK:"; then
+            echo "❌ セキュリティリスクが検出されました:"
+            echo "$RESULT" | grep "SECURITY_RISK:"
+            echo ""
+            echo "コミットを中止しました。問題を修正してから再度コミットしてください。"
+            exit 1
+        elif echo "$RESULT" | grep -q "OK"; then
+            echo "✅ セキュリティチェック完了。問題ありません。"
+            exit 0
+        else
+            # Claude Codeの応答が期待と異なる場合
+            echo "⚠️  セキュリティチェックの結果が不明確です:"
+            echo "$RESULT"
+            echo ""
+            echo "念のため、手動で内容を確認してください。"
+            echo "問題ないことを確認した場合は、--no-verify オプションでコミットできます:"
+            echo "  git commit --no-verify"
+            exit 1
+        fi
