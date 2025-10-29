@@ -1,5 +1,5 @@
 {
-  "name": "masseater/claude-code-plugin",
+  "name": "masseater",
   "description": "共有可能なカスタムコマンド、エージェント、スキル、フックのプラグイン集",
   "version": "0.0.1",
   "author": {

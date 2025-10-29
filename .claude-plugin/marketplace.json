@@ -5,8 +5,8 @@
   },
   "plugins": [
     {
-      "name": "masseater/claude-code-plugin",
-      "source": ".",
+      "name": "masseater",
+      "source": "./",
       "description": "共有可能なカスタムコマンド集"
     }
   ]
