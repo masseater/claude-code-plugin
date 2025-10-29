@@ -1,0 +1,13 @@
+{
+  "name": "my-local-marketplace",
+  "owner": {
+    "name": "masseater"
+  },
+  "plugins": [
+    {
+      "name": "masseater/claude-code-plugin",
+      "source": ".",
+      "description": "共有可能なカスタムコマンド集"
+    }
+  ]
+}
