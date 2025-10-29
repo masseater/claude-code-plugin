@@ -36,7 +36,7 @@ claude-code-plugin/
 
 2. プラグインをインストール:
    ```bash
-   /plugin install masseater/claude-code-plugins@my-local-marketplace
+   /plugin install masseater/claude-code-plugins
    ```
 
 3. インストールされたコマンドを確認:
