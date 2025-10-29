@@ -27,14 +27,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## ローカルテスト手順
 
-1. マーケットプレイスを追加:
+1. マーケットプレイスを追加
    ```
-   /plugin marketplace add /Users/pc386/projects/my-claude-code-plugin
+   /plugin marketplace add /path/to/claude-code-plugin
    ```
 
 2. プラグインをインストール:
    ```
-   /plugin install masseater/claude-code-plugins@my-local-marketplace
+   /plugin install masseater/claude-code-plugins
    ```
 
 3. コマンドを確認: `/help`
