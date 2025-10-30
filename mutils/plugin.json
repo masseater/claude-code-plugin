@@ -1,0 +1,8 @@
+{
+  "name": "mutils",
+  "description": "汎用utilityコマンド集（issue計画、コミット整理、多角的視点分析など）",
+  "version": "0.1.0",
+  "author": {
+    "name": "masseater"
+  }
+}

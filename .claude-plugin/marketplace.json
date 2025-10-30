@@ -1,13 +1,20 @@
 {
-  "name": "masseater-claude-code-plugin",
+  "name": "masseater-plugins",
   "owner": {
     "name": "masseater"
   },
   "plugins": [
     {
-      "name": "masseater",
-      "source": "./",
-      "description": "共有可能なカスタムコマンド集"
+      "name": "mutils",
+      "source": "./mutils",
+      "description": "汎用utilityコマンド集（issue計画、コミット整理、多角的視点分析など）",
+      "version": "0.1.0"
+    },
+    {
+      "name": "sdd",
+      "source": "./sdd",
+      "description": "Spec Driven Development (SDD) ワークフロー支援コマンド集",
+      "version": "0.1.0"
     }
   ]
 }
