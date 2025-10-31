@@ -151,6 +151,37 @@ Phase実装の品質検証を行います。
 - 品質チェックコマンド（lint、type-check、build）
 - Phase間の実装品質
 
+### タスク管理
+
+#### `/sdd:list-specs`
+すべてのspecの一覧とステータスを表示し、`specs/status.md`に保存します。
+
+**表示内容**:
+- タスク名
+- ステータス（未着手/進行中/完了）
+- Phase進捗（各Phaseのタスク完了数）
+- Phase完了条件の達成状況
+- 最終更新日時
+- 次に実行すべきコマンド
+
+**出力形式**:
+- Markdown table形式
+- ステータス順（未着手→進行中→完了）でグループ化
+- 各グループ内で更新日時順（新しい順）にソート
+
+#### `/sdd:archive-spec`
+完了または不要になったspecsをアーカイブします。
+
+**実行内容**:
+- specs/配下のタスク一覧を表示
+- 各タスクのPhase状態からアーカイブ理由を自動判定（完了/保留/却下）
+- 選択したタスクを`specs/_archived/[taskname]/`に移動
+- アーカイブ情報を記録
+
+**移動方法**:
+- Gitリポジトリ内: `git mv`を使用
+- それ以外: `mv`を使用
+
 ### ヘルプ
 
 #### `/sdd:help`
@@ -209,6 +240,13 @@ SDDワークフローの全体像とコマンド一覧を表示します。
 /sdd:verify-phase {taskname} {phase}
 ```
 
+### タスクの状態を確認したい時
+
+```bash
+# すべてのspecの一覧とステータスを表示
+/sdd:list-specs
+```
+
 ### 次に何をすべきか分からない時
 
 ```bash
@@ -216,18 +254,32 @@ SDDワークフローの全体像とコマンド一覧を表示します。
 /sdd:next-step {taskname}
 ```
 
+### タスク完了時・不要になった時
+
+```bash
+# タスクをアーカイブ
+/sdd:archive-spec
+```
+
 ## 📊 ディレクトリ構造
 
 ```
 specs/
-└── {taskname}/
-    ├── overview.md              # プロジェクト概要とPhase構成
-    ├── specification.md         # 機能要件と非機能要件
-    ├── technical-details.md     # 技術仕様と設計
-    └── tasks/
-        ├── phase1-{name}.md     # Phase 1 実装計画
-        ├── phase2-{name}.md     # Phase 2 実装計画
-        └── ...
+├── {taskname}/
+│   ├── overview.md              # プロジェクト概要とPhase構成
+│   ├── specification.md         # 機能要件と非機能要件
+│   ├── technical-details.md     # 技術仕様と設計
+│   └── tasks/
+│       ├── phase1-{name}.md     # Phase 1 実装計画
+│       ├── phase2-{name}.md     # Phase 2 実装計画
+│       └── ...
+└── _archived/
+    └── {taskname}/              # アーカイブされたタスク
+        ├── overview.md
+        ├── specification.md
+        ├── technical-details.md
+        └── tasks/
+            └── ...
 ```
 
 ## 💡 TDDサイクル
