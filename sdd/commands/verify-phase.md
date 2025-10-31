@@ -1,5 +1,6 @@
 ---
 argument-hint: <taskname> <phase番号>
+allowed-tools: SlashCommand(/sdd:verify:docs:*), SlashCommand(/sdd:verify:requirements:*), SlashCommand(/sdd:verify:quality:*)
 ---
 
 # Phase統合検証（ドキュメント・要件・品質の一括検証）
