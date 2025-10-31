@@ -7,28 +7,12 @@ Claude Code用のプラグインリポジトリです。複数の共有可能な
 ### 1. mutils - 汎用ユーティリティコマンド集
 開発ワークフローを効率化する汎用的なコマンド集です。
 
-**コマンド一覧:**
-- `/issue-plan` - GitHubのissueから実装計画を作成
-- `/multi-angle-perspectives` - 多角的な視点から分析
-- `/organize-commits` - コミット履歴を整理
-- `/self-review` - コードのセルフレビューを実施
+詳細: [mutils/README.md](./mutils/README.md)
 
 ### 2. sdd - Spec Driven Development ワークフロー支援
 仕様駆動開発（SDD）のワークフローを支援するコマンド集です。
 
-**主要コマンド:**
-- `/sdd help` - SDDワークフローの使い方
-- `/sdd create-specs` - 新しい仕様を作成
-- `/sdd next-step` - 次のステップを提案
-- `/sdd break-down-phase` - タスクの分解フェーズ
-- `/sdd implement-phase` - 実装フェーズ
-- `/sdd verify-phase` - 検証フェーズ
-- `/sdd sync-spec` - 実装と仕様の同期
-- `/sdd validate-feasibility` - 実装可能性の検証
-- `/sdd clarify-spec` - 仕様の明確化
-- `/sdd contradiction-check` - 仕様の矛盾チェック
-- `/sdd list-specs` - 仕様一覧を表示
-- `/sdd archive-spec` - 仕様をアーカイブ
+詳細: [sdd/README.md](./sdd/README.md)
 
 ## プロジェクト構成
 
