@@ -114,7 +114,7 @@ JWT認証を使用する
 
 💡 次のアクション:
    - 仕様書の内容を確認してください
-   - 必要に応じて `/break-down-phase [taskname]` でPhase別計画書を更新
+   - 必要に応じて `/sdd:break-down-phase [taskname]` でPhase別計画書を更新
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 

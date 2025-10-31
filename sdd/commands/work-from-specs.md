@@ -42,7 +42,7 @@ $ARGUMENTS
 1. **specs/[taskname]/overview.md** - プロジェクト全体の概要とPhase構成を理解
 2. **specs/[taskname]/specification.md** - 機能要件と非機能要件の詳細を確認
 3. **specs/[taskname]/technical-details.md** - 技術的な実装方針を確認
-4. **specs/[taskname]/phase{N}-{phaseName}.md** - 該当するPhaseの計画書を確認
+4. **specs/[taskname]/tasks/phase{N}-{phaseName}.md** - 該当するPhaseの計画書を確認
 
 ### 3. 現在の状況確認
 以下を確認してユーザーに報告：
@@ -127,13 +127,14 @@ $ARGUMENTS
    - タスクの状態を「完了」に更新
    - Phase全体が完了した場合、Phaseの状態を「完了」に更新
    - specs/[taskname]/overview.mdのPhase状態を更新
-   - 該当するspecs/[taskname]/phase{N}-{phaseName}.mdのタスク状態を更新
+   - 該当するspecs/[taskname]/tasks/phase{N}-{phaseName}.mdのタスク状態を更新
+   - **タスク目次の更新**: Phase計画書の先頭にあるタスク目次の該当タスクの状態とTDDステップを更新
 
 3. **次のアクション提案**
    - 次に実装可能になったタスク
    - ブロックが解除されたタスク
    - Phase全体が完了した場合、次のPhaseの提案
-   - 次のタスク番号を提示（例: 「次は `/work-from-specs [taskname] 2.4` で続行できます」）
+   - 次のタスク番号を提示（例: 「次は `/sdd:work-from-specs [taskname] 2.4` で続行できます」）
 
 ### 8. 品質チェックの実施
 作業完了前に必ず以下を確認：
@@ -158,10 +159,10 @@ $ARGUMENTS
 ## 使用例
 
 1. タスク全体を最初から開始:
-   `/work-from-specs user-authentication`
+   `/sdd:work-from-specs user-authentication`
 
 2. Phase 2のタスク3から開始:
-   `/work-from-specs user-authentication 2.3`
+   `/sdd:work-from-specs user-authentication 2.3`
 
 3. 引数なしで対話的に選択:
-   `/work-from-specs`
+   `/sdd:work-from-specs`
