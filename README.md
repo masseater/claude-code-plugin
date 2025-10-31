@@ -1,17 +1,51 @@
 # masseater/claude-code-plugin
 
-共有可能なカスタムコマンド集のプラグインです。
+Claude Code用のプラグインリポジトリです。複数の共有可能なプラグインを含みます。
 
-## プラグイン構成
+## 含まれるプラグイン
+
+### 1. mutils - 汎用ユーティリティコマンド集
+開発ワークフローを効率化する汎用的なコマンド集です。
+
+**コマンド一覧:**
+- `/issue-plan` - GitHubのissueから実装計画を作成
+- `/multi-angle-perspectives` - 多角的な視点から分析
+- `/organize-commits` - コミット履歴を整理
+- `/self-review` - コードのセルフレビューを実施
+
+### 2. sdd - Spec Driven Development ワークフロー支援
+仕様駆動開発（SDD）のワークフローを支援するコマンド集です。
+
+**主要コマンド:**
+- `/sdd help` - SDDワークフローの使い方
+- `/sdd create-specs` - 新しい仕様を作成
+- `/sdd next-step` - 次のステップを提案
+- `/sdd break-down-phase` - タスクの分解フェーズ
+- `/sdd implement-phase` - 実装フェーズ
+- `/sdd verify-phase` - 検証フェーズ
+- `/sdd sync-spec` - 実装と仕様の同期
+- `/sdd validate-feasibility` - 実装可能性の検証
+- `/sdd clarify-spec` - 仕様の明確化
+- `/sdd contradiction-check` - 仕様の矛盾チェック
+- `/sdd list-specs` - 仕様一覧を表示
+- `/sdd archive-spec` - 仕様をアーカイブ
+
+## プロジェクト構成
 
 ```
 claude-code-plugin/
+├── .claude/
+│   └── commands/            # プロジェクト固有のコマンド
 ├── .claude-plugin/
-│   └── plugin.json          # プラグインのメタデータ
-├── commands/                 # カスタムコマンド
-│   └── hello.md             # サンプルコマンド
+│   └── marketplace.json     # ローカルテスト用マーケットプレイス設定
+├── mutils/
+│   ├── plugin.json          # mutilsプラグインのメタデータ
+│   └── commands/            # mutilsのコマンド
+├── sdd/
+│   ├── plugin.json          # sddプラグインのメタデータ
+│   └── commands/            # sddのコマンド
 ├── lefthook.yml             # Git hooks設定（セキュリティチェック）
-├── marketplace.json         # ローカルテスト用マーケットプレイス設定
+├── CLAUDE.md                # Claude Codeへの指示
 └── README.md                # このファイル
 ```
 
@@ -34,9 +68,13 @@ claude-code-plugin/
    /plugin marketplace add /path/to/claude-code-plugin
    ```
 
-2. プラグインをインストール:
+2. プラグインをインストール（どちらか、または両方）:
    ```bash
-   /plugin install masseater/claude-code-plugins
+   # mutilsプラグインをインストール
+   /plugin install mutils
+
+   # sddプラグインをインストール
+   /plugin install sdd
    ```
 
 3. インストールされたコマンドを確認:
@@ -44,9 +82,14 @@ claude-code-plugin/
    /help
    ```
 
-4. サンプルコマンドを実行:
+4. コマンドを実行:
    ```bash
-   /hello
+   # mutilsのコマンド例
+   /issue-plan
+
+   # sddのコマンド例
+   /sdd help
+   /sdd create-specs
    ```
 
 ## Git Hooks（セキュリティチェック）
@@ -89,7 +132,11 @@ git commit --no-verify -m "コミットメッセージ"
 
 ## 新しいコマンドの追加方法
 
-1. `commands/` ディレクトリに新しいマークダウンファイルを作成
+既存のプラグインにコマンドを追加する場合:
+
+1. 対象のプラグインの `commands/` ディレクトリに新しいマークダウンファイルを作成
+   - mutilsの場合: `mutils/commands/`
+   - sddの場合: `sdd/commands/`
 2. ファイル名がコマンド名になります（例: `build.md` → `/build`）
 3. ファイルのフォーマット:
 
@@ -101,28 +148,48 @@ description: コマンドの説明
 コマンドが実行する内容の詳細
 ```
 
+新しいプラグインを追加する場合:
+
+1. 新しいディレクトリを作成（例: `my-plugin/`）
+2. `plugin.json` を作成してメタデータを定義
+3. `commands/` ディレクトリを作成してコマンドを追加
+
 ## 他の人と共有する方法
+
+このリポジトリは複数のプラグインを含むマーケットプレイスとして機能します。
 
 1. このディレクトリをGitリポジトリとして公開
 2. 共有先のユーザーに以下の手順を案内:
-   - リポジトリをクローン
-   - マーケットプレイスとして追加
-   - プラグインをインストール
+   ```bash
+   # リポジトリをクローン
+   git clone <repository-url>
+
+   # マーケットプレイスとして追加
+   /plugin marketplace add /path/to/claude-code-plugin
+
+   # 必要なプラグインをインストール
+   /plugin install mutils
+   /plugin install sdd
+   ```
 
 ## plugin.json のカスタマイズ
 
-`.claude-plugin/plugin.json` を編集して、プラグイン名、説明、作者名などを変更できます:
+各プラグインの `plugin.json` を編集して、プラグイン名、説明、バージョンなどを変更できます:
 
 ```json
 {
-  "name": "masseater/claude-code-plugin",
+  "name": "plugin-name",
   "description": "プラグインの説明",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": {
-    "name": "masseater"
+    "name": "author-name"
   }
 }
 ```
+
+例:
+- `mutils/plugin.json` - mutilsプラグインのメタデータ
+- `sdd/plugin.json` - sddプラグインのメタデータ
 
 ## 参考資料
 
