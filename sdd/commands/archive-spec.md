@@ -14,22 +14,19 @@ specs/配下のタスクを一覧表示し、選択したタスクを`specs/_arc
 3. `specs/`配下のディレクトリ一覧を取得（`_archived`を除外）
 4. タスクが存在しない場合、「アーカイブ可能なタスクがありません」と表示して終了
 
-### 2. 各タスクの状態確認とアーカイブ理由の判定
+### 2. 各タスクのプロジェクトステータス確認
 各タスクについて以下を実行:
 
 1. `specs/[taskname]/overview.md`を読み込む
-2. 各Phaseの「**状態**:」フィールドを抽出
-3. アーカイブ理由を自動判定:
-   - **全Phase「完了」の場合** → アーカイブ理由: `完了`
-   - **いずれかのPhaseが「保留」の場合** → アーカイブ理由: `保留`
-   - **その他（未着手/進行中が残っている場合）** → アーカイブ理由: `却下`
-4. `overview.md`が存在しない、またはPhase情報が取得できない場合 → アーカイブ理由: `不明`
+2. 「## プロジェクトステータス」セクションの「**ステータス**:」フィールドを読み取る
+3. ステータスが「完了」または「却下」のタスクのみをアーカイブ対象とする
+4. `overview.md`が存在しない、またはプロジェクトステータスが取得できない場合 → アーカイブ対象外
 
 ### 3. AskUserQuestionツールでタスクを選択
-1. タスク一覧を「タスク名（理由）」の形式で表示
-   - 例: `user-authentication（完了）`、`payment-integration（保留）`
+1. アーカイブ対象タスク（ステータスが「完了」または「却下」）の一覧を「タスク名（ステータス）」の形式で表示
+   - 例: `user-authentication（完了）`、`payment-integration（却下）`
 2. ユーザーに選択させる
-3. 選択されたタスク名とアーカイブ理由を取得
+3. 選択されたタスク名とステータスを取得
 
 ### 4. アーカイブディレクトリの準備
 1. `specs/_archived/`ディレクトリが存在するか確認
@@ -41,7 +38,7 @@ specs/配下のタスクを一覧表示し、選択したタスクを`specs/_arc
 1. `git rev-parse --is-inside-work-tree`を実行して確認
 2. 成功した場合（Gitリポジトリ内）:
    - `git mv specs/[taskname] specs/_archived/[taskname]`を実行
-   - コミットメッセージ: `Archive spec: [taskname] ([理由])`
+   - コミットメッセージ: `Archive spec: [taskname] ([ステータス])`
 3. 失敗した場合（Gitリポジトリ外）:
    - `mv specs/[taskname] specs/_archived/[taskname]`を実行
 
@@ -49,7 +46,7 @@ specs/配下のタスクを一覧表示し、選択したタスクを`specs/_arc
 Gitリポジトリ内の場合:
 ```bash
 git commit -m "$(cat <<'EOF'
-Archive spec: [taskname] ([理由])
+Archive spec: [taskname] ([ステータス])
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
 
@@ -61,8 +58,7 @@ EOF
 ### 7. 完了報告
 以下を報告:
 - アーカイブ先パス: `specs/_archived/[taskname]/`
-- アーカイブ理由: [完了/保留/却下/不明]
-- Phase状態のサマリー
+- プロジェクトステータス: [完了/却下]
 
 ## エラーハンドリング
 
@@ -84,5 +80,5 @@ specs/_archived/[taskname]/ が既に存在します
 
 ## 注意事項
 - アーカイブしたタスクを復元する場合は、手動で`git mv specs/_archived/[taskname] specs/[taskname]`を実行してください（Gitの場合）
-- アーカイブ理由は各Phaseの状態から自動判定されます
+- アーカイブ対象は、overview.mdの「プロジェクトステータス」が「完了」または「却下」のタスクのみです
 - 既にアーカイブされているタスクは上書きできません
