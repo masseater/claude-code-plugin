@@ -134,7 +134,7 @@ $ARGUMENTS
    - 次に実装可能になったタスク
    - ブロックが解除されたタスク
    - Phase全体が完了した場合、次のPhaseの提案
-   - 次のタスク番号を提示（例: 「次は `/sdd:work-from-specs [taskname] 2.4` で続行できます」）
+   - 次のタスク番号を提示（例: 「次は `/sdd:implement-phase [taskname] 2.4` で続行できます」）
 
 ### 8. 品質チェックの実施
 作業完了前に必ず以下を確認：
@@ -159,10 +159,10 @@ $ARGUMENTS
 ## 使用例
 
 1. タスク全体を最初から開始:
-   `/sdd:work-from-specs user-authentication`
+   `/sdd:implement-phase user-authentication`
 
 2. Phase 2のタスク3から開始:
-   `/sdd:work-from-specs user-authentication 2.3`
+   `/sdd:implement-phase user-authentication 2.3`
 
 3. 引数なしで対話的に選択:
-   `/sdd:work-from-specs`
+   `/sdd:implement-phase`
