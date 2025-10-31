@@ -216,7 +216,7 @@ specs/
 ## インストール
 
 ```bash
-/plugin marketplace add /path/to/claude-code-plugin
+/plugin marketplace add https://github.com/masseater/claude-code-plugin
 /plugin install sdd
 ```
 

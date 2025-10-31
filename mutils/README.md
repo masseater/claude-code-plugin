@@ -110,7 +110,7 @@ GitHub IssueのURLまたは番号から内容を取得し、詳細な実装計�
 ## インストール
 
 ```bash
-/plugin marketplace add /path/to/claude-code-plugin
+/plugin marketplace add https://github.com/masseater/claude-code-plugin
 /plugin install mutils
 ```
 

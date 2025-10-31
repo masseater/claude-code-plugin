@@ -45,11 +45,13 @@ claude-code-plugin/
    lefthook install
    ```
 
-## ローカルでのテスト方法
+## インストール方法
 
-1. マーケットプレイスを追加（プラグインディレクトリの絶対パスを指定）:
+### GitHubから直接インストール
+
+1. マーケットプレイスを追加（GitHubリポジトリのURLを指定）:
    ```bash
-   /plugin marketplace add /path/to/claude-code-plugin
+   /plugin marketplace add https://github.com/masseater/claude-code-plugin
    ```
 
 2. プラグインをインストール（どちらか、または両方）:
@@ -75,6 +77,14 @@ claude-code-plugin/
    /sdd help
    /sdd create-specs
    ```
+
+### ローカル開発の場合
+
+ローカルで開発・テストする場合は、絶対パスを指定してマーケットプレイスを追加できます:
+
+```bash
+/plugin marketplace add /path/to/claude-code-plugin
+```
 
 ## Git Hooks（セキュリティチェック）
 
@@ -142,19 +152,16 @@ description: コマンドの説明
 
 このリポジトリは複数のプラグインを含むマーケットプレイスとして機能します。
 
-1. このディレクトリをGitリポジトリとして公開
-2. 共有先のユーザーに以下の手順を案内:
-   ```bash
-   # リポジトリをクローン
-   git clone <repository-url>
+共有先のユーザーは、GitHubリポジトリのURLを直接指定してインストールできます:
 
-   # マーケットプレイスとして追加
-   /plugin marketplace add /path/to/claude-code-plugin
+```bash
+# マーケットプレイスとして追加
+/plugin marketplace add https://github.com/masseater/claude-code-plugin
 
-   # 必要なプラグインをインストール
-   /plugin install mutils
-   /plugin install sdd
-   ```
+# 必要なプラグインをインストール
+/plugin install mutils
+/plugin install sdd
+```
 
 ## plugin.json のカスタマイズ
 
