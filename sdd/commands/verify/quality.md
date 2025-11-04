@@ -109,3 +109,12 @@ AskUserQuestionで「overview.mdのPhase状態を『完了』に更新します�
 - `.node-version`がある場合は`volta run`を使用
 - テスト・品質チェックコマンドは必ずユーザーに確認
 - コーディング規約（`any`禁止、barrel禁止）は厳格にチェック
+
+## 矛盾チェック（必須）
+
+品質検証後、仕様書とコードの整合性を必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。実装の品質が仕様書の要求水準と整合しているか確認してください。
+```

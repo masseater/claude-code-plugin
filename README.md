@@ -54,8 +54,9 @@ claude-code-plugin/
    /issue-plan
 
    # sddのコマンド例
-   /sdd help
-   /sdd create-specs
+   /sdd:help
+   /sdd:steering         # 初回のみ: ステアリングドキュメント作成
+   /sdd:init-task        # タスク初期化
    ```
 
 ## 共有方法

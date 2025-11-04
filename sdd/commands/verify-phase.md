@@ -138,3 +138,12 @@ Phase計画書とドキュメントの検証：
 - 3つの検証コマンドを順次実行する統合コマンド
 - 各検証で問題が見つかっても、すべての検証を完了してから報告
 - 問題の対応は各検証コマンドで個別に行うか、統合検証後にまとめて対応
+
+## 矛盾チェック（必須）
+
+Phase検証後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。Phase完了状態とタスク完了状態が整合しているか確認してください。
+```
