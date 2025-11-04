@@ -184,8 +184,14 @@ technical-details.md の記載内容と実際のプロジェクト構造を比�
 
 ```bash
 # steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
-# レビュー観点を明示的に指定
 Task(steering-reviewer): specs/[taskname]/technical-details.md をレビューしてください。tech.mdの技術スタックとの整合性、既存プロジェクトとの互換性、structure.mdの構造規約との整合性を確認してください。
 ```
 
-$ARGUMENTS
+## 矛盾チェック（必須）
+
+検証・更新後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。technical-details.mdの変更が他のドキュメントと整合しているか確認してください。
+```

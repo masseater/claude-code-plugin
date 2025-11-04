@@ -200,10 +200,14 @@ Phase構成は調査完了後に `/sdd:plan-phases [taskname]` コマンドで�
 ```bash
 # steering-reviewer SubAgentを使用
 # このSubAgentは指摘のみを行い、修正は行いません
-Task(steering-reviewer): specs/[taskname]/overview.md と specs/[taskname]/research.md をレビューしてください
+Task(steering-reviewer): specs/[taskname]/overview.md と specs/[taskname]/research.md をレビューしてください。product.mdのビジネス目標と調査項目が整合しているか、tech.mdの技術方針と調査項目が適切か、structure.mdのプロジェクト構造と整合しているか確認してください。
 ```
 
-**レビュー観点**:
-- product.md のビジネス目標と調査項目が整合しているか
-- tech.md の技術方針と調査項目が適切か
-- structure.md のプロジェクト構造と整合しているか
+## 矛盾チェック（必須）
+
+ドキュメント作成後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。overview.mdとresearch.mdの整合性を確認してください。
+```

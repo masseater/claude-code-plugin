@@ -205,10 +205,14 @@ $ARGUMENTS
 ```bash
 # steering-reviewer SubAgentを使用
 # このSubAgentは指摘のみを行い、修正は行いません
-Task(steering-reviewer): specs/[taskname]/specification.md をレビューしてください
+Task(steering-reviewer): specs/[taskname]/specification.md をレビューしてください。product.mdのビジネス目標・ターゲットユーザーとの整合性、tech.mdのセキュリティ要件との整合性を確認してください。
 ```
 
-**レビュー観点**:
-- product.md のビジネス目標・ターゲットユーザーとの整合性
-- tech.md のセキュリティ要件との整合性
-- 非機能要件がプロジェクトの品質標準を満たしているか
+## 矛盾チェック（必須）
+
+ドキュメント作成後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。機能定義、データ要件の整合性を確認してください。
+```

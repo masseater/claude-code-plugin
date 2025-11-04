@@ -124,3 +124,12 @@ AskUserQuestionで各問題の対応方針を確認（最大4問/回）：
 - 仕様書と実装の整合性を検証
 - 機能レベルの実装検証を実施（コードレビュー）
 - Phase間の成果物の存在と使用状況を確認
+
+## 矛盾チェック（必須）
+
+要件検証後、仕様書とコードの整合性を必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。実装が仕様書と整合しているか確認してください。
+```

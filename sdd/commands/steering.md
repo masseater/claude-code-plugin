@@ -333,3 +333,12 @@ mkdir -p specs/_steering
 - 既存プロジェクトの場合、Bootstrap Modeで自動検出された内容を必ず確認・調整してください
 - プロジェクトの方針や技術スタックが大きく変わった場合は、このコマンドを再実行してください
 - ステアリングドキュメントは抽象的なレベルを保ち、具体的なコマンド名やファイル名は列挙しないでください
+
+## 矛盾チェック（必須）
+
+ステアリングドキュメント作成後、3つのドキュメント間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/_steering/ の全ドキュメント間の矛盾をチェックしてください。product.md、tech.md、structure.mdの整合性を確認してください。
+```

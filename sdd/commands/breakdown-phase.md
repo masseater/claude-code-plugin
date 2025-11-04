@@ -406,10 +406,14 @@ Phaseは以下の基準で分割してください：
 ```bash
 # steering-reviewer SubAgentを使用
 # このSubAgentは指摘のみを行い、修正は行いません
-Task(steering-reviewer): specs/[taskname]/tasks/phase{N}-{name}.md をレビューしてください
+Task(steering-reviewer): specs/[taskname]/tasks/phase{N}-{name}.md をレビューしてください。tech.mdのコーディング標準・テスト戦略に準拠しているか、structure.mdのモジュール境界・命名規則を守っているか、product.mdのビジネス目標と整合しているか確認してください。
 ```
 
-**レビュー観点**:
-- tech.md のコーディング標準・テスト戦略に準拠しているか
-- structure.md のモジュール境界・命名規則を守っているか
-- product.md のビジネス目標と整合しているか
+## 矛盾チェック（必須）
+
+Phase詳細計画書作成後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。Phase詳細計画がoverview.md、specification.md、technical-details.mdと整合しているか確認してください。
+```

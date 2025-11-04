@@ -384,13 +384,3 @@ specs/
 2. `/sdd:breakdown-phase` で各Phaseの詳細計画を個別に作成
 3. Phase実装前に詳細計画を見直し可能
 
-## ⚠️ 非推奨コマンド
-
-### `/sdd:create-specs` (非推奨)
-このコマンドは役割ごとに細分化された以下のコマンドに置き換えられました：
-- `/sdd:steering` - ステアリングドキュメント作成
-- `/sdd:init-task` - タスク初期化
-- `/sdd:define-requirements` - 要件定義
-- `/sdd:define-technical` - 技術詳細定義
-- `/sdd:plan-phases` - Phase構成決定
-- `/sdd:breakdown-phase` - Phase詳細計画

@@ -179,5 +179,14 @@ JWT認証を使用する
 
 ```bash
 # steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
-Task(steering-reviewer): specs/[taskname]/ 配下の全ドキュメントをレビューしてください
+Task(steering-reviewer): specs/[taskname]/ 配下の全ドキュメントをレビューしてください。product.mdのビジネス目標との整合性、tech.mdの技術方針との整合性を確認してください。
+```
+
+## 矛盾チェック（必須）
+
+明確化後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。明確化による変更が他のドキュメントと整合しているか確認してください。
 ```

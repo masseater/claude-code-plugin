@@ -198,6 +198,14 @@ $ARGUMENTS
 
 ```bash
 # steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
-# レビュー観点を明示的に指定
 Task(steering-reviewer): 実装したコードをレビューしてください。tech.mdのコーディング標準との整合性、structure.mdの命名規則・モジュール境界の遵守、product.mdのビジネス目標との整合性を確認してください。
+```
+
+## 矛盾チェック（必須）
+
+実装後、仕様書とコードの整合性を必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。実装内容がPhase計画書、specification.md、technical-details.mdと整合しているか確認してください。
 ```

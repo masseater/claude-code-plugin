@@ -295,10 +295,14 @@ Phase構成がステアリングドキュメントに準拠しているか必ず
 ```bash
 # steering-reviewer SubAgentを使用
 # このSubAgentは指摘のみを行い、修正は行いません
-Task(steering-reviewer): specs/[taskname]/overview.md のPhase構成セクションをレビューしてください
+Task(steering-reviewer): specs/[taskname]/overview.md のPhase構成セクションをレビューしてください。product.mdのビジネス目標とPhaseの目標が整合しているか、tech.mdのアーキテクチャ方針とPhase分割が適切か、structure.mdのモジュール境界とPhase境界が適切か確認してください。
 ```
 
-**レビュー観点**:
-- product.md のビジネス目標とPhaseの目標が整合しているか
-- tech.md のアーキテクチャ方針とPhase分割が適切か
-- structure.md のモジュール境界とPhase境界が適切か
+## 矛盾チェック（必須）
+
+Phase構成追加後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。Phase構成が機能要件、技術詳細と整合しているか確認してください。
+```
