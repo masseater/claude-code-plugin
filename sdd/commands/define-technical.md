@@ -1,6 +1,7 @@
 ---
 argument-hint: <タスク名>
 description: 技術詳細とアーキテクチャ設計を作成
+allowed-tools: ["Read", "Write", "Task", "AskUserQuestion"]
 ---
 
 # 技術詳細ドキュメントを作成します
@@ -304,7 +305,7 @@ CREATE TABLE users (
 ```bash
 # steering-reviewer SubAgentを使用
 # このSubAgentは指摘のみを行い、修正は行いません
-Task(general-purpose): sdd/agents/steering-reviewer.md を読み込んで、specs/[taskname]/technical-details.md をレビューしてください
+Task(steering-reviewer): specs/[taskname]/technical-details.md をレビューしてください
 ```
 
 **レビュー観点**:

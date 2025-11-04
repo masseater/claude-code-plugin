@@ -1,6 +1,7 @@
 ---
 argument-hint: <タスク名>
 description: Phase構成を決定してoverview.mdに追加（詳細なタスク分解はしない）
+allowed-tools: ["Read", "Edit", "Task", "AskUserQuestion"]
 ---
 
 # Phase構成を決定します
@@ -294,7 +295,7 @@ Phase構成がステアリングドキュメントに準拠しているか必ず
 ```bash
 # steering-reviewer SubAgentを使用
 # このSubAgentは指摘のみを行い、修正は行いません
-Task(general-purpose): sdd/agents/steering-reviewer.md を読み込んで、specs/[taskname]/overview.md のPhase構成セクションをレビューしてください
+Task(steering-reviewer): specs/[taskname]/overview.md のPhase構成セクションをレビューしてください
 ```
 
 **レビュー観点**:
