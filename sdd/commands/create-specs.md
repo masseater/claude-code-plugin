@@ -1,12 +1,63 @@
 ---
 argument-hint: <計画の説明>
+deprecated: true
 ---
 
-# 計画をもとにプロジェクトの全容ドキュメント、技術詳細、仕様書を生成します
+# ⚠️ このコマンドは非推奨です（Deprecated）
+
+このコマンドは役割ごとに細分化された新しいコマンドに置き換えられました。
+以下の新しいワークフローを使用してください：
+
+## 新しいワークフロー
+
+### 1. ステアリングドキュメント作成（初回のみ）
+```
+/sdd:steering
+```
+プロジェクト全体の永続的なコンテキスト（プロダクト方針、技術スタック、プロジェクト構造）を作成
+
+### 2. タスクの初期化
+```
+/sdd:init-task <計画の説明>
+```
+タスクスケルトンを作成（research.md, overview.md）
+
+### 3. 要件と技術詳細の定義
+```
+/sdd:define-requirements <taskname>
+/sdd:define-technical <taskname>
+```
+要件仕様と技術詳細を生成
+
+### 4. 調査と検証
+```
+/sdd:conduct-research <taskname>
+/sdd:validate-feasibility <taskname>
+/sdd:contradiction-check <taskname>
+```
+技術調査を実施し、実現可能性を検証
+
+### 5. Phase構成の決定
+```
+/sdd:plan-phases <taskname>
+```
+調査完了後、Phase構成をoverview.mdに追加
+
+### 6. Phase詳細計画の作成
+```
+/sdd:breakdown-phase <taskname> <phase番号>
+```
+各Phaseの詳細タスク計画を作成
+
+---
+
+# [非推奨] 計画をもとにプロジェクトの全容ドキュメント、技術詳細、仕様書を生成します
+
+**⚠️ このコマンドは非推奨です。上記の新しいワークフローを使用してください。**
 
 以下の計画に基づいて、specs/[taskname]/配下に包括的な仕様書ドキュメントを作成してください。
 
-**注意**: Phase別計画書の生成・管理には `/break-down-phase` コマンドを使用してください。
+**注意**: Phase別計画書の生成・管理には `/sdd:breakdown-phase` コマンドを使用してください。
 
 【計画内容】
 $ARGUMENTS
