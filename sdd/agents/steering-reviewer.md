@@ -1,6 +1,7 @@
 ---
-description: ステアリングドキュメントに基づいてコードやドキュメントの問題点を指摘（対応は行わない）
-subagent_type: general-purpose
+agent-type: "steering-reviewer"
+when-to-use: "ステアリングドキュメント(specs/_steering/)に基づいてコードやドキュメントがプロジェクト方針に準拠しているかレビューする時。指摘のみを行い、修正は行わない。"
+allowed-tools: ["Read", "Glob", "Grep", "Bash"]
 ---
 
 # Steering Document Reviewer SubAgent

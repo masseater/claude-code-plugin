@@ -296,3 +296,18 @@ CREATE TABLE users (
 - steering/tech.md から逸脱する場合は、明確な理由と承認を得ること
 - specification.mdとの役割分担を明確にする（機能要件 vs 技術実装）
 - 不明なところは勝手に決めずに「**不明**」と明記すること
+
+## ステアリングドキュメントレビュー（必須）
+
+生成された technical-details.md がステアリングドキュメントに準拠しているか必ず確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用
+# このSubAgentは指摘のみを行い、修正は行いません
+Task(general-purpose): sdd/agents/steering-reviewer.md を読み込んで、specs/[taskname]/technical-details.md をレビューしてください
+```
+
+**レビュー観点**:
+- tech.md の技術スタックとの整合性
+- structure.md の構造規約との整合性
+- product.md のビジネス目標との整合性

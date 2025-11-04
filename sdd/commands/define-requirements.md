@@ -196,3 +196,18 @@ $ARGUMENTS
 - 不明なところは勝手に決めずに「**不明**」と明記すること
 - ユーザーが選択しなかった非機能要件セクションは含めないこと
 - specification.mdは機能要件の詳細を記述する場所（技術実装の詳細はtechnical-details.mdで記述）
+
+## ステアリングドキュメントレビュー（必須）
+
+生成された specification.md がステアリングドキュメントに準拠しているか必ず確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用
+# このSubAgentは指摘のみを行い、修正は行いません
+Task(general-purpose): sdd/agents/steering-reviewer.md を読み込んで、specs/[taskname]/specification.md をレビューしてください
+```
+
+**レビュー観点**:
+- product.md のビジネス目標・ターゲットユーザーとの整合性
+- tech.md のセキュリティ要件との整合性
+- 非機能要件がプロジェクトの品質標準を満たしているか
