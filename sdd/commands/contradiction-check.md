@@ -50,42 +50,52 @@ $ARGUMENTS
 - `/sdd:steering` コマンドでステアリングドキュメントを作成することを推奨
 - 処理は続行（ステアリングドキュメントは必須ではない）
 
-### 3. ドキュメント間の矛盾チェック
+### 3. ドキュメント間の矛盾チェック（contradiction-checker SubAgent使用）
 
-以下の矛盾をチェックし、**全ての矛盾をリストアップ**してください：
+**contradiction-checker SubAgent** を使用して包括的な矛盾チェックを実施します：
 
-#### Phase情報の矛盾
-- overview.mdとtasks/phase*.mdでPhase数、Phase名、Phase状態、開始日時が一致しているか
-- overview.mdの各Phaseの「目標」とtasks/phase*.mdの「Phase概要」の目標が一致しているか
-- overview.mdの各Phaseの「依存関係」とtasks/phase*.mdの「依存関係」セクション（前提条件、ブロッカー、後続Phaseへの影響）が一致しているか
-- overview.mdの各Phaseの「成果物」とtasks/phase*.mdの「Phase完了条件」や「次Phaseへの引き継ぎ事項」が一致しているか
+```bash
+# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
+Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。Phase情報、機能定義、データ設計、API設計、セキュリティ要件、Phase間依存関係の整合性を確認してください。
+```
 
-#### 機能の矛盾
-- overview.md、specification.md、technical-details.mdで記載されている機能リストが一致しているか
-- specification.mdの各機能に対応する実装Phaseがtasks/phase*.mdに存在するか
+**SubAgentがチェックする項目**:
+- Phase情報の整合性（overview.md ⇔ tasks/phase*.md）
+- 機能定義の整合性（overview.md ⇔ specification.md ⇔ technical-details.md）
+- データ設計の整合性（specification.md ⇔ technical-details.md）
+- API設計の整合性
+- セキュリティ要件の整合性
+- Phase間依存関係の妥当性
 
-#### データ設計の矛盾
-- specification.mdとtechnical-details.mdでデータモデルの記述が一致しているか
+SubAgentは検出した矛盾を重要度別（高/中/低）にレポートします。
 
-### 4. 矛盾の報告と修正
+### 4. 矛盾の修正
 
-**矛盾を発見した場合:**
+**contradiction-checker SubAgentが矛盾を報告した場合:**
 
-1. **全ての矛盾をまとめて報告**する：
-   - 矛盾の種類
-   - 矛盾している箇所（ファイル名と該当部分）
-   - 各ドキュメントでの記述内容
+1. **SubAgentのレポートを確認**:
+   - 重要度別の矛盾一覧を確認
+   - 各矛盾の影響範囲と推奨対応を確認
 
-2. **AskUserQuestionツールを使用**して、全ての矛盾についてまとめて質問する：
+2. **高重要度の矛盾から対応**:
+   - 実装作業に影響する矛盾を優先的に修正
+
+3. **AskUserQuestionツールを使用**して修正方針を確認:
    - 各矛盾に対して、どちらのドキュメントを正とするか
    - または新しい内容にするか
+   - 複数の矛盾がある場合は、まとめて質問
 
-3. ユーザーの回答に基づいて該当ドキュメントを修正
+4. **ユーザーの回答に基づいて該当ドキュメントを修正**:
+   - Editツールを使用してドキュメントを更新
+   - 修正内容を明確に報告
 
-4. 修正完了を報告
+5. **修正完了後、再度矛盾チェック**:
+   - 修正によって新たな矛盾が発生していないか確認
+   - 必要に応じてcontradiction-checker SubAgentを再実行
 
 **矛盾がない場合:**
-- 「矛盾は見つかりませんでした」と報告
+- SubAgentのレポートを基に「矛盾は見つかりませんでした」と報告
+- 次のステップ（実装開始など）を提案
 
 ## ステアリングドキュメントレビュー（必須）
 

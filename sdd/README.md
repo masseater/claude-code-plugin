@@ -133,7 +133,7 @@ technical-details.mdの実現可能性を検証します。
 
 **追加内容**:
 - Phase名、目標、依存関係、成果物
-- 3〜5個のPhaseを生成
+- 適切な数のPhaseを生成（プロジェクトの複雑度に応じて柔軟に決定）
 - ユーザー承認後にoverview.mdを更新
 
 **重要**: 詳細なタスク計画は `/sdd:breakdown-phase` で個別に作成
