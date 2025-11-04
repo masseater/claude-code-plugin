@@ -1,5 +1,6 @@
 ---
 argument-hint: <タスク名> [調査項目番号]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "WebSearch", "Task"]
 ---
 
 # research.mdの調査項目を実施し、結果を仕様書に反映します
@@ -280,3 +281,12 @@ $ARGUMENTS
 
 3. 引数なしで対話的に選択:
    `/sdd:conduct-research`
+
+## ステアリングドキュメントレビュー（必須）
+
+調査結果反映後のドキュメントがステアリングドキュメントに準拠しているか必ず steering-reviewer SubAgent を使用して確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
+Task(steering-reviewer): specs/[taskname]/ 配下の全ドキュメントをレビューしてください
+```

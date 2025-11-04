@@ -1,5 +1,6 @@
 ---
 argument-hint: <タスク名>
+allowed-tools: ["Read", "Edit", "Task"]
 ---
 
 # specsドキュメント間の矛盾をチェックし、修正します
@@ -85,3 +86,13 @@ $ARGUMENTS
 
 **矛盾がない場合:**
 - 「矛盾は見つかりませんでした」と報告
+
+## ステアリングドキュメントレビュー（必須）
+
+矛盾修正後のドキュメントがステアリングドキュメントに準拠しているか必ず steering-reviewer SubAgent を使用して確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
+# レビュー観点を明示的に指定
+Task(steering-reviewer): specs/[taskname]/ 配下の全ドキュメントをレビューしてください。product.mdのビジネス目標との整合性、tech.mdの技術方針との整合性、structure.mdのプロジェクト構造との整合性を確認してください。
+```

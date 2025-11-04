@@ -1,6 +1,7 @@
 ---
 argument-hint: <タスク名> <phase番号>
 description: 指定されたPhaseの詳細タスク計画書を生成
+allowed-tools: ["Read", "Write", "Task", "AskUserQuestion"]
 ---
 
 # 指定されたPhaseの詳細タスク計画書を生成します
@@ -397,3 +398,18 @@ Phaseは以下の基準で分割してください：
 - 依存関係は具体的かつ明確に記述し、依存性注入（関数やオブジェクトを引数として渡す）を活用
 - overview.mdの「Phase概要と依存関係」セクションと整合性を保つ
 - Phase名は overview.md から自動抽出し、ファイル名は `phase{N}-{kebab-case-name}.md` 形式とする
+
+## ステアリングドキュメントレビュー（必須）
+
+生成された Phase詳細計画書がステアリングドキュメントに準拠しているか必ず確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用
+# このSubAgentは指摘のみを行い、修正は行いません
+Task(steering-reviewer): specs/[taskname]/tasks/phase{N}-{name}.md をレビューしてください
+```
+
+**レビュー観点**:
+- tech.md のコーディング標準・テスト戦略に準拠しているか
+- structure.md のモジュール境界・命名規則を守っているか
+- product.md のビジネス目標と整合しているか

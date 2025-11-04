@@ -1,6 +1,7 @@
 ---
 argument-hint: <計画の説明>
 description: タスクの基本骨格を作成（Phase構成なし、調査項目とプロジェクト概要のみ）
+allowed-tools: ["Read", "Write", "Task"]
 ---
 
 # タスクの基本骨格を作成します
@@ -191,3 +192,18 @@ Phase構成は調査完了後に `/sdd:plan-phases [taskname]` コマンドで�
 - 不明なところは勝手に決めずに「**不明**」と明記し、複数の案（案A、案B、案Cなど）を記述すること
 - 「将来的に必要になる」「今後〜が必要」といった適当な推測に基づいた記述は禁止
 - 現時点で明確に必要なことのみを記載すること
+
+## ステアリングドキュメントレビュー（必須）
+
+生成された overview.md と research.md がステアリングドキュメントに準拠しているか必ず確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用
+# このSubAgentは指摘のみを行い、修正は行いません
+Task(steering-reviewer): specs/[taskname]/overview.md と specs/[taskname]/research.md をレビューしてください
+```
+
+**レビュー観点**:
+- product.md のビジネス目標と調査項目が整合しているか
+- tech.md の技術方針と調査項目が適切か
+- structure.md のプロジェクト構造と整合しているか

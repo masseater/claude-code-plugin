@@ -1,5 +1,6 @@
 ---
 argument-hint: <タスク名>
+allowed-tools: ["Read", "Edit", "Task", "AskUserQuestion"]
 ---
 
 # specs内の不明箇所をユーザーに質問して明確化します
@@ -171,3 +172,12 @@ JWT認証を使用する
 - 更新時は「**不明**」の記述と案のリストを全て削除し、選択された内容のみを記載
 - 複数ファイルにまたがる不明箇所も漏れなく更新すること
 - 更新前に必ずファイルの内容を読み込み、正確な位置を特定すること
+
+## ステアリングドキュメントレビュー（必須）
+
+明確化後のドキュメントがステアリングドキュメントに準拠しているか必ず steering-reviewer SubAgent を使用して確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
+Task(steering-reviewer): specs/[taskname]/ 配下の全ドキュメントをレビューしてください
+```

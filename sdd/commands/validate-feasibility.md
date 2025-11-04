@@ -1,5 +1,6 @@
 ---
 argument-hint: <タスク名>
+allowed-tools: ["Read", "Edit", "Glob", "Grep", "Task"]
 ---
 
 # technical-details.md の実現可能性検証と更新
@@ -176,5 +177,15 @@ technical-details.md の記載内容と実際のプロジェクト構造を比�
 - 曖昧な表現を避け、具体的なパス、ファイル名、ライブラリ名を使用
 - プロジェクトの既存の規約や構造を優先すること
 - 判断できない箇所は「**不明**」と明記し、複数案がある場合は列挙すること
+
+## ステアリングドキュメントレビュー（必須）
+
+検証・更新後の technical-details.md がステアリングドキュメントに準拠しているか必ず steering-reviewer SubAgent を使用して確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
+# レビュー観点を明示的に指定
+Task(steering-reviewer): specs/[taskname]/technical-details.md をレビューしてください。tech.mdの技術スタックとの整合性、既存プロジェクトとの互換性、structure.mdの構造規約との整合性を確認してください。
+```
 
 $ARGUMENTS

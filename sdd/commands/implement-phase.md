@@ -1,5 +1,6 @@
 ---
 argument-hint: <taskname> [phase.task]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Task", "AskUserQuestion"]
 ---
 
 # specs/[taskname]/配下の仕様書ドキュメントを読み込み、それに基づいて実装作業を行います
@@ -190,3 +191,13 @@ $ARGUMENTS
 
 3. 引数なしで対話的に選択:
    `/sdd:implement-phase`
+
+## ステアリングドキュメントレビュー（必須）
+
+実装後のコードがステアリングドキュメントに準拠しているか必ず steering-reviewer SubAgent を使用して確認してください：
+
+```bash
+# steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
+# レビュー観点を明示的に指定
+Task(steering-reviewer): 実装したコードをレビューしてください。tech.mdのコーディング標準との整合性、structure.mdの命名規則・モジュール境界の遵守、product.mdのビジネス目標との整合性を確認してください。
+```
