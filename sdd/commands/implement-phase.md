@@ -1,6 +1,6 @@
 ---
 argument-hint: <taskname> [phase.task]
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Task", "AskUserQuestion"]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Task", "AskUserQuestion", "TodoWrite"]
 ---
 
 # specs/[taskname]/配下の仕様書ドキュメントを読み込み、それに基づいて実装作業を行います
@@ -16,6 +16,37 @@ $ARGUMENTS
   - 例: `user-authentication 2.3` → user-authenticationのphase2のタスク3から開始
 
 ## 実行手順
+
+### 0. TodoWriteで実装ステップをTodoリストに追加
+
+コマンド実行時、最初に以下の4つのステップをTodoWriteツールでTodoリストに追加：
+
+```
+TodoWrite([
+  {
+    content: "タスクとPhaseの特定",
+    activeForm: "タスクとPhaseを特定中",
+    status: "in_progress"
+  },
+  {
+    content: "ステアリングドキュメントと仕様書の読み込み",
+    activeForm: "ステアリングドキュメントと仕様書を読み込み中",
+    status: "pending"
+  },
+  {
+    content: "Phase状況の確認",
+    activeForm: "Phase状況を確認中",
+    status: "pending"
+  },
+  {
+    content: "実装作業の実行",
+    activeForm: "実装作業を実行中",
+    status: "pending"
+  }
+])
+```
+
+その後、以下のステップを順番に実行し、各ステップ完了時にTodoの状態を更新：
 
 ### 1. タスクとPhase/タスクの特定
 上記の引数を解析して作業対象を特定：
@@ -55,6 +86,9 @@ $ARGUMENTS
 - プロジェクト構造と命名規則
 - コード組織原則
 - モジュール境界
+
+**`specs/_steering/principles.md`**:
+- 開発原則
 
 **ステアリングドキュメントが存在しない場合**:
 - 警告メッセージを表示: 「⚠️ ステアリングドキュメントが見つかりません。プロジェクト固有のコンテキストなしで進めます。」
@@ -106,60 +140,77 @@ $ARGUMENTS
    - ブロッカーがないか確認
    - 必要なライブラリやツールが揃っているか確認
 
-3. **実装計画の提示**
-   TodoWriteツールを使用して以下を計画：
-   - 実装するタスクのリスト（指定されたタスクから開始）
-   - 各タスクの依存関係
-   - 推定作業時間
-   - テスト計画
+3. **TodoWriteで実装タスクを追加**
+
+   Phase計画書のタスクリストから、以下の形式でTodoWriteに実装用Todoを追加：
+
+   ```
+   - content: "{タスク名} の実装"
+     activeForm: "{タスク名} を実装中"
+     status: "pending"
+   ```
+
+   **重要**:
+   - Phase計画書のタスク1つにつき、Todoアイテム1つを作成
+   - タスクの依存関係順に並べる
+   - 各Todoには以下の情報を含める：
+     - 実装対象のファイルパス
+     - 実装する機能の概要
+     - テスト対象
 
 4. **ユーザーに確認**
-   「この計画で作業を開始してよろしいですか？」
+
+   追加した実装用Todoリストを表示し、AskUserQuestionで確認：
+   「この計画で実装作業を開始してよろしいですか？」
+
+   承認された場合、次のステップへ進む
 
 ### 7. 実装作業
-承認後、以下の手順で作業を進める：
+承認後、追加した実装用Todoを1つずつ実行：
 
-1. **実装**
+各Todoについて以下の手順で作業：
+
+1. **Todoを`in_progress`に更新**
+
+2. **実装**
    - specification.mdの要件を満たすコードを実装
    - technical-details.mdの技術方針に従う
    - 既存のコードベースとの整合性を保つ
    - any型は絶対に使用しない
 
-2. **品質チェック**
+3. **品質チェック**
    - コードレビュー基準に従っているか確認
    - エラーハンドリングが適切か確認
    - 関数型プログラミングのスタイルを意識（map/filterの活用）
 
-3. **テスト**
+4. **テスト**
    - Phase計画書のテスト計画に従ってテストを実装
    - ユニットテスト
    - 統合テスト（必要に応じて）
 
-4. **ドキュメント更新**
-   - コード内コメント
-   - 必要に応じてREADMEやAPI仕様を更新
+5. **Todoを`completed`に更新**
+
+6. **次のTodoへ** - すべての実装Todoが完了するまで繰り返し
 
 ### 8. 完了報告と状態更新
-作業完了後、以下を報告：
 
-1. **実装内容のサマリー**
-   - 実装した機能
-   - 変更したファイル
-   - 追加したテスト
+作業完了後の報告フォーマット：
 
-2. **Phase状態の更新提案**
-   「以下のファイルを更新してもよろしいですか？」
-   - タスクの状態を「完了」に更新
-   - Phase全体が完了した場合、Phaseの状態を「完了」に更新
-   - specs/[taskname]/overview.mdのPhase状態を更新
-   - 該当するspecs/[taskname]/tasks/phase{N}-{phaseName}.mdのタスク状態を更新
-   - **タスク目次の更新**: Phase計画書の先頭にあるタスク目次の該当タスクの状態とTDDステップを更新
+```
+✅ タスク [Phase.Task] の実装が完了しました
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📍 対象: specs/{taskname}/ - Phase {N}, Task {M}
 
-3. **次のアクション提案**
-   - 次に実装可能になったタスク
-   - ブロックが解除されたタスク
-   - Phase全体が完了した場合、次のPhaseの提案
-   - 次のタスク番号を提示（例: 「次は `/sdd:implement-phase [taskname] 2.4` で続行できます」）
+💡 次のアクション:
+   - 次のタスク実施: `/sdd:implement-phase {taskname} {phase}.{task+1}`
+   - Phase検証実施: `/sdd:verify-phase {taskname} {phase}` （Phase内の全タスク完了時）
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Phase状態の更新**:
+- specs/[taskname]/overview.mdのPhase状態を更新
+- 該当するspecs/[taskname]/tasks/phase{N}-{phaseName}.mdのタスク状態を更新
+- タスク目次の該当タスクの状態とTDDステップを更新
 
 ### 9. 品質チェックの実施
 作業完了前に必ず以下を確認：
@@ -175,11 +226,10 @@ $ARGUMENTS
 
 ## 重要な注意事項
 
-- **仕様書を常に参照**: 実装中は常にspecification.mdとtechnical-details.mdを参照し、要件から逸脱しないこと
-- **依存関係の遵守**: Phase計画書に記載された依存関係を必ず確認し、順序を守ること
-- **状態管理**: タスクやPhaseの状態を適切に更新すること（specs/[taskname]/配下のファイル）
-- **品質基準**: CLAUDE.mdと.agents/README.mdの品質基準を遵守すること
-- **コミュニケーション**: 不明点や仕様の矛盾があれば、実装前にユーザーに確認すること
+- 実装中は仕様書（overview.md、specification.md、technical-details.md）を常に参照し、要件から逸脱しないこと
+- Phase計画書の依存関係を必ず確認し、順序を守ること
+- タスク・Phaseの状態を適切に更新すること
+- 不明点や仕様の矛盾があれば、実装前にユーザーに確認すること
 
 ## 使用例
 
@@ -192,20 +242,26 @@ $ARGUMENTS
 3. 引数なしで対話的に選択:
    `/sdd:implement-phase`
 
-## ステアリングドキュメントレビュー（必須）
+## 内部品質チェック
 
-実装後のコードがステアリングドキュメントに準拠しているか必ず steering-reviewer SubAgent を使用して確認してください：
+**重要**: 以下のチェックはコマンド内部で実施し、**生成されるspecファイルには結果を記載しません**。
 
-```bash
-# steering-reviewer SubAgentを使用（指摘のみ、修正は行わない）
-Task(steering-reviewer): 実装したコードをレビューしてください。tech.mdのコーディング標準との整合性、structure.mdの命名規則・モジュール境界の遵守、product.mdのビジネス目標との整合性を確認してください。
-```
+### ステアリングドキュメントレビュー（内部処理）
 
-## 矛盾チェック（必須）
+実装完了後、内部的にステアリングドキュメントとの整合性を確認：
+- product.mdのビジネス目標との整合性
+- tech.mdのコーディング標準との整合性
+- structure.mdの命名規則・モジュール境界の遵守
+- principles.mdの開発原則との一致
 
-実装後、仕様書とコードの整合性を必ず contradiction-checker SubAgent を使用して確認してください：
+問題がある場合のみユーザーに修正を促す。準拠している場合は何も出力しない。
 
-```bash
-# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
-Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。実装内容がPhase計画書、specification.md、technical-details.mdと整合しているか確認してください。
-```
+### 矛盾チェック（内部処理）
+
+実装完了後、内部的に仕様書間の矛盾を確認：
+- 実装内容とPhase計画書の整合性
+- specification.mdとの整合性
+- technical-details.mdとの整合性
+- 依存関係のあるドキュメント間の矛盾
+
+矛盾がある場合のみユーザーに警告を表示。問題がなければ何も出力しない。

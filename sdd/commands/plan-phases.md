@@ -19,9 +19,10 @@ $ARGUMENTS
 
 以下のステアリングドキュメントを読み込み、プロジェクトのコンテキストを把握：
 
-- `specs/_steering/product.md` - ビジネス目標、優先順位
+- `specs/_steering/product.md` - プロダクト方針、ビジネス目標
 - `specs/_steering/tech.md` - 技術スタック、アーキテクチャパターン
 - `specs/_steering/structure.md` - プロジェクト構造
+- `specs/_steering/principles.md` - 開発原則
 
 ### 1. タスクディレクトリの確認
 
@@ -29,7 +30,6 @@ $ARGUMENTS
 - `specs/[taskname]/` ディレクトリの存在を確認
 - 必須ファイルの存在確認:
   - `overview.md`
-  - `research.md`
   - `specification.md`
   - `technical-details.md`
 
@@ -41,37 +41,25 @@ $ARGUMENTS
 
 Phase分けを開始する前に、必ず調査が完了していることを確認:
 
-1. **research.mdの読み込みと確認**
-   - `specs/[taskname]/research.md` を読み込み
-   - 「全体ステータス」を確認
+1. **overview.mdの調査セクション確認**
+   - `specs/[taskname]/overview.md` の調査項目表を読み込み
+   - 全ての調査項目の状態を確認
 
 2. **調査ステータスの判定**
-   - ステータスが「完了」の場合: 次のステップへ進む
-   - ステータスが「完了」でない場合:
+   - 全て「完了」の場合: 次のステップへ進む
+   - 「未着手」がある場合:
      - 警告メッセージを表示: 「⚠️ 調査が完了していません」
      - 未完了の調査項目をリスト表示
-     - **AskUserQuestionツールで確認**:
-       ```
-       調査が完了していませんが、Phase構成の決定を続行しますか？
-
-       未完了の調査項目:
-       - [項目1]
-       - [項目2]
-
-       選択肢:
-       - いいえ（推奨）: `/sdd:conduct-research [taskname]` で調査を完了させてください
-       - はい: Phase構成決定を続行（非推奨、後で手戻りが発生する可能性があります）
-       ```
-     - 「いいえ」の場合: 処理を中断し、調査の完了を促す
+     - AskUserQuestionツールで確認して続行するか判断
+     - 続行しない場合: `/sdd:conduct-research [taskname]` を推奨
 
 ### 3. 既存ドキュメントの分析
 
 以下のドキュメントから情報を抽出してPhase構成を決定:
 
-#### research.md
-- 調査結果と結論
-- 技術選定の決定事項
-- 各調査項目の影響範囲
+#### overview.md
+- 調査結果（調査セクションおよびspecs/research/配下の個別ファイル）
+- 実装概要
 
 #### specification.md
 - 機能要件の詳細
@@ -149,9 +137,9 @@ Phase分けを開始する前に、必ず調査が完了していることを確
 
 ```mermaid
 graph TB
-    P1[Phase 1: Foundation]
-    P2[Phase 2: Core Features]
-    P3[Phase 3: Advanced Features]
+    P1[Phase 1: [具体的なPhase名]]
+    P2[Phase 2: [具体的なPhase名]]
+    P3[Phase 3: [具体的なPhase名]]
 
     P1 --> P2
     P2 --> P3
@@ -211,18 +199,13 @@ graph TB
 - **成果物**:
   - [成果物1]
 
-**タスク番号形式について:**
-- Phase内のタスクは番号で管理されます（`/sdd:breakdown-phase`で生成）
-- 並列実行するタスクはn.x形式（例: 2.1, 2.2, 2.3）で番号付けされます
-- 単一番号のタスク（例: 1, 3）は前のタスクグループ完了後に実行されます
-
 ## Phase依存関係図
 
 ```mermaid
 graph TB
-    P1[Phase 1: Foundation]
-    P2[Phase 2: Core Features]
-    P3[Phase 3: Advanced Features]
+    P1[Phase 1: [具体的なPhase名]]
+    P2[Phase 2: [具体的なPhase名]]
+    P3[Phase 3: [具体的なPhase名]]
 
     P1 --> P2
     P2 --> P3
@@ -230,7 +213,7 @@ graph TB
 
 ## シーケンス図
 
-[主要な機能のシーケンス図をMermaid記法で記述]
+主要な機能のシーケンス図をMermaid記法で記述:
 
 ```mermaid
 sequenceDiagram
@@ -239,43 +222,27 @@ sequenceDiagram
     participant API as APIサーバー
     participant DB as データベース
 
-    User->>Client: アクション実行
-    Client->>API: リクエスト送信
-    API->>DB: データ取得/更新
+    User->>Client: [アクション]
+    Client->>API: [リクエスト]
+    API->>DB: [データ操作]
     DB-->>API: レスポンス
-    API-->>Client: レスポンス返却
+    API-->>Client: レスポンス
     Client-->>User: 結果表示
 ```
-
-複数の主要機能がある場合は、機能ごとにシーケンス図を作成してください。
 ```
 
 **重要**: 既存のoverview.mdの内容は保持し、上記セクションを追加
 
 ### 7. 完了報告
 
-```markdown
+```
 ✅ Phase構成を決定しました
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📍 更新先: specs/[taskname]/overview.md
-
-📊 Phase構成:
-   - Phase数: [N]個
-   - Phase 1: [Phase名] - [目標]
-   - Phase 2: [Phase名] - [目標]
-   - Phase 3: [Phase名] - [目標]
-
-🔗 Phase依存関係:
-   Phase 1 → Phase 2 → Phase 3
+📊 Phase数: [N]個
 
 💡 次のアクション:
-   1. **Phase 1の詳細計画**: `/sdd:breakdown-phase [taskname] 1` でPhase 1の詳細タスク計画を作成
-   2. overview.mdの内容を確認・調整してください
-   3. Phase構成を変更したい場合は、このコマンドを再実行してください
-
-⚠️ 重要:
-   - Phase内の詳細なタスク分解は `/sdd:breakdown-phase [taskname] <phase番号>` で実施します
-   - Phase 1の計画が完了してから実装を開始することを推奨します
+   - Phase 1の詳細計画: `/sdd:breakdown-phase [taskname] 1`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -288,21 +255,24 @@ sequenceDiagram
 - 各Phaseは独立してデプロイ・リリース可能な単位にする
 - Phase間の依存関係を明確にする
 
-## ステアリングドキュメントレビュー（必須）
+## 内部品質チェック
 
-Phase構成がステアリングドキュメントに準拠しているか必ず確認してください：
+**重要**: 以下のチェックはコマンド内部で実施し、**生成されるspecファイルには結果を記載しません**。
 
-```bash
-# steering-reviewer SubAgentを使用
-# このSubAgentは指摘のみを行い、修正は行いません
-Task(steering-reviewer): specs/[taskname]/overview.md のPhase構成セクションをレビューしてください。product.mdのビジネス目標とPhaseの目標が整合しているか、tech.mdのアーキテクチャ方針とPhase分割が適切か、structure.mdのモジュール境界とPhase境界が適切か確認してください。
-```
+### ステアリングドキュメントレビュー（内部処理）
 
-## 矛盾チェック（必須）
+Phase構成追加後、内部的にステアリングドキュメントとの整合性を確認：
+- product.mdのビジネス目標とPhaseの目標の整合性
+- tech.mdのアーキテクチャ方針とPhase分割の適切性
+- structure.mdのモジュール境界とPhase境界の適切性
 
-Phase構成追加後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+問題がある場合のみユーザーに修正を促す。準拠している場合は何も出力しない。
 
-```bash
-# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
-Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。Phase構成が機能要件、技術詳細と整合しているか確認してください。
-```
+### 矛盾チェック（内部処理）
+
+Phase構成追加後、内部的に仕様書間の矛盾を確認：
+- Phase構成と機能要件の整合性
+- Phase構成と技術詳細の整合性
+- Phase間の依存関係の妥当性
+
+矛盾がある場合のみユーザーに警告を表示。問題がなければ何も出力しない。

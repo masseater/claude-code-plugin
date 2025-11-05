@@ -199,27 +199,13 @@ Phase計画書とoverview.mdへの更新内容を整理：
 ### 9. 完了報告
 
 ```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ✅ ドキュメント同期完了
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 📍 specs/{taskname}/ - Phase {N}
-📅 {YYYY-MM-DD HH:MM}
 
-## 更新されたファイル
-- specs/{taskname}/tasks/phase{N}-*.md
-- specs/{taskname}/overview.md
-
-## 同期された内容
-- 完了タスク: {completed}/{total}
-- Phase状態: {old_status} → {new_status}
-- TDDステップ完了: {completed_tdd_steps}/{total_tdd_steps}
-
-## 💡 次のアクション
-- 作業を続ける場合: `/sdd:implement-phase {taskname} {next_task}`
-- Phase検証: `/sdd:verify-phase {taskname} {N}`
-- 後で再度同期: `/sdd:sync-spec {taskname} {N}`
-
+💡 次のアクション:
+   - 作業を続ける: `/sdd:implement-phase {taskname} {next_task}`
+   - Phase検証: `/sdd:verify-phase {taskname} {N}`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -261,11 +247,15 @@ Phase状態の推奨値（ユーザーは任意に変更可能）：
 
 このコマンドは「実装作業は継続するが、現時点の進捗を仕様書に記録したい」という場合に最適です。
 
-## 矛盾チェック（必須）
+## 内部品質チェック
 
-ドキュメント同期後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+**重要**: 以下のチェックはコマンド内部で実施し、**生成されるspecファイルには結果を記載しません**。
 
-```bash
-# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
-Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。同期後のPhase状態とタスク状態が整合しているか確認してください。
-```
+### 矛盾チェック（内部処理）
+
+ドキュメント同期後、内部的に仕様書間の矛盾を確認：
+- Phase状態とタスク状態の整合性
+- 依存関係のあるタスク間の矛盾
+- overview.mdとPhase計画書の整合性
+
+矛盾がある場合のみユーザーに警告を表示。問題がなければ何も出力しない。

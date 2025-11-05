@@ -18,19 +18,32 @@ SDDは以下の原則に基づいています：
 ```
 0. ステアリングドキュメント作成（初回のみ）
    ↓
-1. タスク初期化
+1. タスク初期化・実装計画
+   ├── タスク骨格作成
+   ├── 実装概要・調査項目特定
+   └── 調査実施
    ↓
 2. 要件・技術詳細の定義
+   ├── 要件定義
+   ├── 技術詳細作成
+   └── 実現可能性検証
    ↓
-3. 調査・検証
+3. 仕様の検証・明確化
+   ├── 不明箇所の明確化
+   └── 矛盾チェック
    ↓
 4. Phase構成の決定
    ↓
-5. Phase詳細計画
+5. Phase詳細計画（各Phaseごと）
    ↓
 6. Phase実装
+   ├── Phase実装
+   └── ドキュメント同期
    ↓
 7. Phase検証
+   ├── ドキュメント検証
+   ├── 要件検証
+   └── 品質検証
    ↓
 8. 次Phaseへ（5に戻る）
 ```
@@ -46,6 +59,7 @@ SDDは以下の原則に基づいています：
 - `specs/_steering/product.md` - プロダクト方針、ターゲットユーザー、ビジネス目標
 - `specs/_steering/tech.md` - 技術スタック、アーキテクチャ、開発標準
 - `specs/_steering/structure.md` - プロジェクト構造、命名規則、コード組織原則
+- `specs/_steering/principles.md` - 開発原則（TDD、SOLID、YAGNI）
 
 **実行モード**:
 - **Bootstrap Mode（初期作成）**: 既存プロジェクトから情報を抽出して自動生成
@@ -53,41 +67,34 @@ SDDは以下の原則に基づいています：
 
 **重要**: 全ての `/sdd:*` コマンドは自動的にステアリングドキュメントを読み込みます
 
-### Phase 1: タスク初期化
+---
+
+### Phase 1: タスク初期化・実装計画
 
 #### `/sdd:init-task <計画の説明>`
-新しいタスクのスケルトンを作成します（Phase構成はまだ作成しません）。
+新しいタスクのスケルトンを作成します（最小限の情報のみ）。
 
 **生成されるファイル**:
-- `specs/{taskname}/overview.md` - プロジェクト概要（Phase構成なし）
-- `specs/{taskname}/research.md` - 調査項目リスト
+- `specs/{taskname}/overview.md` - プロジェクト概要（実装概要と調査項目は未記入）
 
-**重要**: Phase構成は調査完了後に `/sdd:plan-phases` で作成します
+**次のステップ**: `/sdd:plan-implementation {taskname}`
 
-### Phase 2: 要件・技術詳細の定義
+#### `/sdd:plan-implementation <タスク名>`
+実装概要と調査項目を特定してoverview.mdに追加します。
 
-#### `/sdd:define-requirements <taskname>`
-機能要件と非機能要件を定義します。
+**更新されるファイル**:
+- `specs/{taskname}/overview.md` - 実装概要と調査項目表を追加
 
-**生成されるファイル**:
-- `specs/{taskname}/specification.md` - 機能要件、非機能要件
+**次のステップ**: `/sdd:conduct-research {taskname}`
 
-**特徴**:
-- 非機能要件は選択式（セキュリティは常に含む）
-- ステアリングドキュメントと整合性を保つ
-
-#### `/sdd:define-technical <taskname>`
-技術仕様と設計を定義します。
+#### `/sdd:conduct-research <タスク名> [調査項目名]`
+overview.mdの調査項目を実施し、個別ファイルとして保存します。
 
 **生成されるファイル**:
-- `specs/{taskname}/technical-details.md` - 技術スタック、アーキテクチャ、API設計
+- `specs/research/[調査項目名].md` - 調査結果（結論、詳細、関連タスク）
 
-**重要**: `specs/_steering/tech.md` の技術方針を尊重（逸脱する場合は理由を明記）
-
-### Phase 3: 調査・検証
-
-#### `/sdd:conduct-research <taskname> [調査項目番号]`
-research.mdの技術調査項目を実施します。
+**更新されるファイル**:
+- `specs/{taskname}/overview.md` - 調査項目表の状態を「完了」に更新
 
 **役割**:
 - 技術的な調査・検証（AIが自律的に実施）
@@ -97,7 +104,35 @@ research.mdの技術調査項目を実施します。
 - `conduct-research`: AIが調べる（技術的検証）
 - `clarify-spec`: ユーザーに聞く（ビジネス要件）
 
-#### `/sdd:validate-feasibility <taskname>`
+**次のステップ**: `/sdd:define-requirements {taskname}`（全調査完了後）
+
+---
+
+### Phase 2: 要件・技術詳細の定義
+
+#### `/sdd:define-requirements <タスク名>`
+機能要件と非機能要件を定義します。
+
+**生成されるファイル**:
+- `specs/{taskname}/specification.md` - 機能要件、非機能要件
+
+**特徴**:
+- 非機能要件は選択式（セキュリティは常に含む）
+- ステアリングドキュメントと整合性を保つ
+
+**次のステップ**: `/sdd:define-technical {taskname}`
+
+#### `/sdd:define-technical <タスク名>`
+技術仕様と設計を定義します。
+
+**生成されるファイル**:
+- `specs/{taskname}/technical-details.md` - 技術スタック、アーキテクチャ、API設計
+
+**重要**: `specs/_steering/tech.md` の技術方針を尊重（逸脱する場合は理由を明記）
+
+**次のステップ**: `/sdd:validate-feasibility {taskname}`
+
+#### `/sdd:validate-feasibility <タスク名>`
 technical-details.mdの実現可能性を検証します。
 
 **検証内容**:
@@ -105,7 +140,30 @@ technical-details.mdの実現可能性を検証します。
 - 技術スタックの整合性
 - 実装可能性
 
-#### `/sdd:contradiction-check <taskname>`
+**更新されるファイル**:
+- `specs/{taskname}/technical-details.md` - 実プロジェクトとの整合性を確認・修正
+
+**次のステップ**: `/sdd:plan-phases {taskname}`
+
+---
+
+### Phase 3: 仕様の検証・明確化
+
+#### `/sdd:clarify-spec <タスク名>`
+仕様書内の不明点（ビジネス要件）をユーザーに質問します。
+
+**対象**:
+- 「**不明**」とマークされた箇所
+- 複数の案がある箇所（案A、案B、案C）
+
+**更新されるファイル**:
+- `specs/{taskname}/` 配下の全ドキュメント - 「**不明**」箇所を更新
+
+**vs conduct-research**:
+- `clarify-spec`: ユーザーに聞く（ビジネス要件）
+- `conduct-research`: AIが調べる（技術的検証）
+
+#### `/sdd:contradiction-check <タスク名>`
 仕様書間の矛盾を検出します。
 
 **チェック項目**:
@@ -113,23 +171,14 @@ technical-details.mdの実現可能性を検証します。
 - 機能の矛盾（overview.md ⇔ specification.md ⇔ technical-details.md）
 - データ設計の矛盾（specification.md ⇔ technical-details.md）
 
-#### `/sdd:clarify-spec <taskname>`
-仕様書内の不明点（ビジネス要件）をユーザーに質問します。
-
-**対象**:
-- 「**不明**」とマークされた箇所
-- 複数の案がある箇所（案A、案B、案C）
-
-**vs conduct-research**:
-- `clarify-spec`: ユーザーに聞く（ビジネス要件）
-- `conduct-research`: AIが調べる（技術的検証）
+---
 
 ### Phase 4: Phase構成の決定
 
-#### `/sdd:plan-phases <taskname>`
+#### `/sdd:plan-phases <タスク名>`
 調査完了後、Phase構成をoverview.mdに追加します。
 
-**前提条件**: `research.md` の全調査項目が完了していること
+**前提条件**: `overview.md` の全調査項目が「完了」状態であること
 
 **追加内容**:
 - Phase名、目標、依存関係、成果物
@@ -138,13 +187,17 @@ technical-details.mdの実現可能性を検証します。
 
 **重要**: 詳細なタスク計画は `/sdd:breakdown-phase` で個別に作成
 
+**次のステップ**: `/sdd:breakdown-phase {taskname} 1`
+
+---
+
 ### Phase 5: Phase詳細計画
 
-#### `/sdd:breakdown-phase <taskname> <phase番号>`
+#### `/sdd:breakdown-phase <タスク名> <phase番号>`
 指定されたPhaseの詳細タスク計画を生成します。
 
 **引数**:
-- `<taskname>` - タスク名（必須）
+- `<タスク名>` - タスク名（必須）
 - `<phase番号>` - Phase番号（必須、例: 1, 2, 3）
 
 **生成されるファイル**:
@@ -157,6 +210,10 @@ technical-details.mdの実現可能性を検証します。
 - テスト戦略
 
 **重要**: Phase構成は `/sdd:plan-phases` で事前に決定されている必要があります
+
+**次のステップ**: `/sdd:implement-phase {taskname} {N}.1`
+
+---
 
 ### Phase 6: Phase実装
 
@@ -174,6 +231,10 @@ Phase計画書に基づいて実装作業を行います。
 - 品質チェック
 - Phase計画書の状態更新
 
+**次のステップ**:
+- 次のタスク: `/sdd:implement-phase {taskname} {phase}.{task+1}`
+- Phase検証: `/sdd:verify-phase {taskname} {phase}`（Phase完了時）
+
 #### `/sdd:sync-spec [taskname] [phase番号]`
 実装状況を調査してPhase計画書とoverview.mdを同期します。
 
@@ -183,6 +244,8 @@ Phase計画書に基づいて実装作業を行います。
 - Phase計画書とoverview.mdを更新
 
 **引数省略時**: 会話のコンテキストから自動推測
+
+---
 
 ### Phase 7: Phase検証
 
@@ -204,6 +267,12 @@ Phase完了時の統合検証を実行します。
 - `/sdd:verify:requirements <taskname> <phase番号>` - 要件検証
 - `/sdd:verify:quality <taskname> <phase番号>` - 品質検証
 
+**次のステップ**:
+- 次のPhase: `/sdd:implement-phase {taskname} {N+1}.1`
+- 全Phase完了: `/sdd:archive-spec {taskname}`
+
+---
+
 ### タスク管理
 
 #### `/sdd:list-specs`
@@ -211,10 +280,13 @@ Phase完了時の統合検証を実行します。
 
 **表示内容**:
 - タスク名
-- ステータス
-- Phase進捗
-- 最終更新
+- ステータス（未着手/進行中/完了）
+- Phase進捗（Phase N (完了数/総数)）
+- 最終更新日
 - 次のコマンド
+
+**生成されるファイル**:
+- `specs/status.md` - 全タスクの進捗状況
 
 #### `/sdd:archive-spec`
 完了または不要になったspecsをアーカイブします。
@@ -224,6 +296,8 @@ Phase完了時の統合検証を実行します。
 - 「完了」または「却下」のタスクのみを対象
 - `specs/_archived/{taskname}/`に移動
 
+---
+
 ### ナビゲーション
 
 #### `/sdd:next-step <taskname>`
@@ -231,6 +305,8 @@ Phase完了時の統合検証を実行します。
 
 #### `/sdd:help`
 SDDワークフローの全体像とコマンド一覧を表示します（詳細ガイド）。
+
+---
 
 ## よくある使い方
 
@@ -244,25 +320,32 @@ SDDワークフローの全体像とコマンド一覧を表示します（詳�
 # 1. タスク初期化
 /sdd:init-task <計画の説明>
 
-# 2. 要件と技術詳細を定義
+# 2. 実装概要と調査項目を特定
+/sdd:plan-implementation {taskname}
+
+# 3. 調査実施
+/sdd:conduct-research {taskname}
+
+# 4. 要件と技術詳細を定義
 /sdd:define-requirements {taskname}
 /sdd:define-technical {taskname}
 
-# 3. 調査・検証
-/sdd:conduct-research {taskname}
+# 5. 実現可能性検証
 /sdd:validate-feasibility {taskname}
-/sdd:contradiction-check {taskname}
-/sdd:clarify-spec {taskname}
 
-# 4. Phase構成を決定
+# 6. 不明点の明確化・矛盾チェック
+/sdd:clarify-spec {taskname}
+/sdd:contradiction-check {taskname}
+
+# 7. Phase構成を決定
 /sdd:plan-phases {taskname}
 
-# 5. Phase詳細計画を作成（各Phaseごと）
+# 8. Phase詳細計画を作成（各Phaseごと）
 /sdd:breakdown-phase {taskname} 1
 /sdd:breakdown-phase {taskname} 2
 # ...
 
-# 6. Phase実装を開始
+# 9. Phase実装を開始
 /sdd:implement-phase {taskname}
 ```
 
@@ -296,6 +379,8 @@ SDDワークフローの全体像とコマンド一覧を表示します（詳�
 /sdd:archive-spec
 ```
 
+---
+
 ## ディレクトリ構造
 
 ```
@@ -303,10 +388,13 @@ specs/
 ├── _steering/                   # プロジェクト全体の永続的コンテキスト
 │   ├── product.md               # プロダクト方針
 │   ├── tech.md                  # 技術スタック
-│   └── structure.md             # プロジェクト構造
+│   ├── structure.md             # プロジェクト構造
+│   └── principles.md            # 開発原則
+├── research/                    # 調査結果の個別ファイル
+│   ├── [調査項目名].md
+│   └── ...
 ├── {taskname}/
-│   ├── overview.md              # プロジェクト概要とPhase構成
-│   ├── research.md              # 調査項目リスト
+│   ├── overview.md              # プロジェクト概要、Phase構成、調査項目表
 │   ├── specification.md         # 機能要件と非機能要件
 │   ├── technical-details.md     # 技術仕様と設計
 │   └── tasks/
@@ -318,23 +406,36 @@ specs/
     └── {taskname}/              # アーカイブされたタスク
 ```
 
-## 新ワークフローの特徴
+---
+
+## ワークフローの特徴
 
 ### ステアリングドキュメント
 - プロジェクト全体の「永続的メモリ」として機能
 - 全ての `/sdd:*` コマンドが自動的に読み込む
 - Bootstrap Modeで既存プロジェクトから自動抽出
+- principles.md で開発原則（TDD、SOLID、YAGNI）を定義
 
 ### 調査ファースト
 - Phase構成の決定前に技術調査を完了
-- `research.md` で調査項目を管理
+- `overview.md` の調査項目表で調査を管理
 - `/sdd:conduct-research` で技術的検証を実施
+- 調査結果は `specs/research/` に個別ファイルとして保存
 
 ### Phase構成の段階的作成
-1. `/sdd:plan-phases` でPhase構成のみを決定
-2. `/sdd:breakdown-phase` で各Phaseの詳細計画を個別に作成
-3. Phase実装前に詳細計画を見直し可能
+1. `/sdd:plan-implementation` で実装概要と調査項目を特定
+2. `/sdd:conduct-research` で調査を完了
+3. `/sdd:plan-phases` でPhase構成のみを決定
+4. `/sdd:breakdown-phase` で各Phaseの詳細計画を個別に作成
+5. Phase実装前に詳細計画を見直し可能
 
+### 内部品質チェック
+- SubAgent（steering-reviewer、contradiction-checker）による内部チェック
+- **重要**: チェック結果はspecファイルに書かず、問題がある場合のみユーザーに報告
+- ステアリングドキュメントへの準拠チェック
+- 仕様書間の矛盾チェック
+
+---
 
 ## インストール
 
@@ -343,6 +444,13 @@ specs/
 /plugin install sdd
 ```
 
+---
+
 ## 参考資料
 
 - [Claude Code プラグインドキュメント](https://docs.claude.com/ja/docs/claude-code/plugins)
+
+---
+
+**最終更新**: 2025-01-05
+**コマンド数**: 21コマンド
