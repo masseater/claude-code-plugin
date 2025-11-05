@@ -1,6 +1,6 @@
 ---
 argument-hint: <taskname> [phase.task]
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Task", "AskUserQuestion"]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Task", "AskUserQuestion", "TodoWrite"]
 ---
 
 # specs/[taskname]/配下の仕様書ドキュメントを読み込み、それに基づいて実装作業を行います
@@ -16,6 +16,37 @@ $ARGUMENTS
   - 例: `user-authentication 2.3` → user-authenticationのphase2のタスク3から開始
 
 ## 実行手順
+
+### 0. TodoWriteで実装ステップをTodoリストに追加
+
+コマンド実行時、最初に以下の4つのステップをTodoWriteツールでTodoリストに追加：
+
+```
+TodoWrite([
+  {
+    content: "タスクとPhaseの特定",
+    activeForm: "タスクとPhaseを特定中",
+    status: "in_progress"
+  },
+  {
+    content: "ステアリングドキュメントと仕様書の読み込み",
+    activeForm: "ステアリングドキュメントと仕様書を読み込み中",
+    status: "pending"
+  },
+  {
+    content: "Phase状況の確認",
+    activeForm: "Phase状況を確認中",
+    status: "pending"
+  },
+  {
+    content: "実装作業の実行",
+    activeForm: "実装作業を実行中",
+    status: "pending"
+  }
+])
+```
+
+その後、以下のステップを順番に実行し、各ステップ完了時にTodoの状態を更新：
 
 ### 1. タスクとPhase/タスクの特定
 上記の引数を解析して作業対象を特定：
@@ -113,6 +144,7 @@ $ARGUMENTS
    TodoWriteツールを使用して以下を計画：
    - 実装するタスクのリスト（指定されたタスクから開始）
    - 各タスクの依存関係
+   - 推定作業時間
    - テスト計画
 
 4. **ユーザーに確認**
