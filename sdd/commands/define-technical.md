@@ -85,22 +85,15 @@ graph TB
 ### インフラ構成
 [デプロイ環境、インフラ構成]
 
-## 技術選定
+## 技術選定（タスク固有の技術のみ）
 
-### 採用技術とその理由
+**注意**: steering/tech.md で既に定義されている技術については記載不要です。このタスク固有の技術選定のみ記載してください。
 
-#### [技術1]
-- **採用理由**: [なぜこの技術を選んだか、steering/tech.mdの方針との整合性]
-- **代替案との比較**:
-  - 案A: [採用技術] ← 選択
-  - 案B: [代替案1]
-  - 案C: [代替案2]
-- **選択根拠**: [具体的な根拠]
+#### [技術名]（必要な場合のみ）
+- **採用理由**: [1-2行で簡潔に]
+- **steering/tech.mdとの関係**: [準拠/逸脱の明記]
 
-#### [技術2]
-...
-
-**注意**: 既に steering/tech.md で定義されている技術については、その理由を参照してください。
+技術選定が不要な場合: 「steering/tech.mdの標準技術を使用」と記載
 
 ## データ設計
 
@@ -149,45 +142,22 @@ CREATE TABLE users (
 
 **命名規約**: steering/structure.md の規約に準拠
 
-| メソッド | パス | 説明 | 認証 |
-|---------|------|------|------|
-| GET | /api/users | ユーザー一覧取得 | 必要 |
-| POST | /api/users | ユーザー作成 | 必要 |
-| GET | /api/users/:id | ユーザー詳細取得 | 必要 |
-| PUT | /api/users/:id | ユーザー更新 | 必要 |
-| DELETE | /api/users/:id | ユーザー削除 | 必要 |
+| メソッド | パス | 説明 | 入力 | 出力 |
+|---------|------|------|------|------|
+| GET | /api/users | ユーザー一覧取得 | クエリパラメータ | User[] |
+| POST | /api/users | ユーザー作成 | UserInput | User |
+| GET | /api/users/:id | ユーザー詳細取得 | id | User |
+| PUT | /api/users/:id | ユーザー更新 | id, UserInput | User |
+| DELETE | /api/users/:id | ユーザー削除 | id | 成功/失敗 |
 
-### リクエスト/レスポンス仕様
+### リクエスト/レスポンス仕様（必要な場合のみ）
 
-#### POST /api/users
+複雑なAPI仕様がある場合のみ詳細を記載。標準的なCRUD操作の場合は省略可。
 
-**リクエスト**:
-```json
-{
-  "email": "user@example.com",
-  "name": "山田太郎"
-}
-```
-
-**レスポンス（成功）**:
-```json
-{
-  "id": 1,
-  "email": "user@example.com",
-  "name": "山田太郎",
-  "created_at": "2025-01-01T00:00:00Z"
-}
-```
-
-**レスポンス（エラー）**:
-```json
-{
-  "error": {
-    "code": "VALIDATION_ERROR",
-    "message": "メールアドレスが無効です"
-  }
-}
-```
+#### [エンドポイント名]（必要な場合のみ）
+- **入力**: [JSON例]
+- **出力**: [JSON例]
+- **エラー**: [エラーコード一覧]
 
 ### 認証・認可
 
@@ -266,28 +236,15 @@ CREATE TABLE users (
 
 ### 4. 完了報告
 
-```markdown
+```
 ✅ 技術詳細ドキュメントを作成しました
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📍 作成先: specs/[taskname]/technical-details.md
-
-📝 作成内容:
-   - アーキテクチャ: [概要]
-   - 技術スタック: steering/tech.md に準拠
-   - データ設計: [エンティティ数]
-   - API設計: [エンドポイント数]
-
-🔗 ステアリングドキュメントとの整合性:
-   - 技術スタック: ✅ 準拠
-   - アーキテクチャパターン: ✅ 準拠
-   - 命名規約: ✅ 準拠
-   - [逸脱がある場合はここに記載]
+📝 エンドポイント数: [N]件
 
 💡 次のアクション:
-   1. **整合性チェック**: `/sdd:contradiction-check [taskname]` でドキュメント間の矛盾をチェック
-   2. **実現可能性検証**: `/sdd:validate-feasibility [taskname]` で実プロジェクトとの整合性を検証
-   3. **調査実施**: `/sdd:conduct-research [taskname]` で技術的な調査項目を実施
-   4. **不明点の明確化**: `/sdd:clarify-spec [taskname]` で「不明」箇所をユーザーに確認
+   - Phase計画: `/sdd:plan-phases [taskname]`
+   - 不明点の明確化: `/sdd:clarify-spec [taskname]`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -298,21 +255,24 @@ CREATE TABLE users (
 - specification.mdとの役割分担を明確にする（機能要件 vs 技術実装）
 - 不明なところは勝手に決めずに「**不明**」と明記すること
 
-## ステアリングドキュメントレビュー（必須）
+## 内部品質チェック
 
-生成された technical-details.md がステアリングドキュメントに準拠しているか必ず確認してください：
+**重要**: 以下のチェックはコマンド内部で実施し、**生成されるspecファイルには結果を記載しません**。
 
-```bash
-# steering-reviewer SubAgentを使用
-# このSubAgentは指摘のみを行い、修正は行いません
-Task(steering-reviewer): specs/[taskname]/technical-details.md をレビューしてください。tech.mdの技術スタックとの整合性、structure.mdの構造規約との整合性、product.mdのビジネス目標との整合性を確認してください。
-```
+### ステアリングドキュメントレビュー（内部処理）
 
-## 矛盾チェック（必須）
+ドキュメント生成後、内部的にステアリングドキュメントとの整合性を確認：
+- tech.mdの技術スタックとの整合性（最重要）
+- structure.mdの構造規約との整合性
+- product.mdのビジネス目標との整合性
 
-ドキュメント作成後、仕様書間の矛盾がないか必ず contradiction-checker SubAgent を使用して確認してください：
+問題がある場合のみユーザーに修正を促す。準拠している場合は何も出力しない。
 
-```bash
-# contradiction-checker SubAgentを使用（指摘のみ、修正は行わない）
-Task(contradiction-checker): specs/[taskname]/ の全ドキュメント間の矛盾をチェックしてください。データ設計、API設計の整合性を確認してください。
-```
+### 矛盾チェック（内部処理）
+
+ドキュメント生成後、内部的に仕様書間の矛盾を確認：
+- specification.mdとtechnical-details.mdのデータ設計の整合性
+- API設計と機能要件の整合性
+- データモデルとAPI仕様の整合性
+
+矛盾がある場合のみユーザーに警告を表示。問題がなければ何も出力しない。
